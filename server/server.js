@@ -21,7 +21,6 @@ app.get("/:id", (req, res, next) => {
         res.send(table);
     } else{
         res.status(404).send("not found");
-
     }
 });
 
