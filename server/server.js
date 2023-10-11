@@ -15,7 +15,6 @@ app.use((req, res, next) => {
 });
 
 app.get("/:id", (req, res, next) => {
-
     const id = req.params.id;
     if (id){
         res.send(table);
