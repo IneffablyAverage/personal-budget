@@ -9,6 +9,7 @@ const table = ['list', 'of', 'words', '00l', 'and', 'things'];
 
 app.use(morgan('dev'));
 
+//allow requests from localhost port 5500
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
   next();
