@@ -1,27 +1,30 @@
 const express = require('express');
 const morgan = require('morgan');
-const cors = require('cors');
+const bodyParser = require('body-parser');
+const db = require('./queries.js');
 
 const app = express();
 
-const table = ['list', 'of', 'words', '00l', 'and', 'things']; 
 
 
+app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 //allow requests from localhost port 5500
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
   next();
 });
 
-app.get("/:id", (req, res, next) => {
-    const id = req.params.id;
-    if (id){
-        res.send(table);
-    } else{
-        res.status(404).send("not found");
-    }
-});
+app.use('/envelopes/:envelopeId', db.verifyEnvelopeId);
+
+app.get("/envelopes", db.getEnvelopes);
+app.get("/envelopes/:envelopeId", db.getEnvelopeById);
+
+app.post('/envelopes', db.postNewEnvelope);
+
+
+//delete envelope by envelopeId is working
+app.delete('/envelopes/:envelopeId', db.deleteEnvelopeById);
 
 app.listen(3000, () => console.log("listening on port 3000"));
