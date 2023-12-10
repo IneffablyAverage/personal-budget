@@ -6,3 +6,23 @@
 #dynamic {
     background-color: aliceblue;
 }
+
+.table-container {
+    width: 80%;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+  }
+  
+  table {
+    margin-right: auto;
+    margin-left: auto;
+    width: 80%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }

@@ -10,14 +10,16 @@ const db = require('./queries.js');
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(morgan('dev'));
-
 //allow requests from localhost port 5500
 app.use((_, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
+app.use(bodyParser.json());
+app.use(morgan('dev'));
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/envelopes/:envelopeId', db.verifyEnvelopeId);
