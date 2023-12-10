@@ -1,6 +1,7 @@
 const Pool = require("pg").Pool;
 require('dotenv').config();
 
+//pool is used to access the postgresql daatabase being used for this app
 const pool = new Pool({
     user: process.env.USER,
     host: process.env.HOST,
@@ -19,6 +20,7 @@ const getEnvelopeById = (req, res) => {
       res.status(200).json(results.rows);
     })
 }
+
 const getEnvelopes = (req, res) => {
     pool.query('SELECT * FROM envelopes ORDER BY id ASC', (error, results) => {
       if (error) {
@@ -29,8 +31,8 @@ const getEnvelopes = (req, res) => {
 }
 
 const postNewEnvelope = (req, res) => {
-  const {name, balance} = req.body;
-
+  const name = req.body.name;
+  const balance = req.body.balance;
   pool.query(`INSERT INTO envelopes (name, balance) VALUES ($1, $2)`, [name, balance], (error, results) => {
     if (error){
       throw error
