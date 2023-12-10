@@ -8,7 +8,8 @@ let content = document.querySelector('#dynamic');
 let testMessage = document.querySelector('#test-message');
 let envelopeForm = document.querySelector('#envelope-form');
 let heldResponse = '';
-let homeContent = ``
+let homeContent = ``;
+let currentTable = ``;
 
 const homeURL = "http://localhost:3000/envelopes/"
 
@@ -39,10 +40,25 @@ function adjustButtons(buttonNum){
         }
     }
 }
+async function resetHome(){
+    content.innerHTML = jsonArrayToTable(await getData(homeURL));
+
+}
+async function homePage(){
+    try{
+        currentTable = jsonArrayToTable(await getData(homeURL));
+    } catch {}
+    content.innerHTML = homeContent + currentTable;
+    heldResponse = '';
+    currentTable = ``;
+    adjustButtons(0);
+}
 
 async function postPage(){
-    heldResponse += jsonArrayToTable(await getData(homeURL));
-    content.innerHTML = postContent + heldResponse;
+    try{
+        currentTable = jsonArrayToTable(await getData(homeURL));
+    } catch(err){}
+    content.innerHTML = postContent + heldResponse + currentTable;
     adjustButtons(2);
 
     //select form from dom
@@ -72,9 +88,10 @@ async function postPage(){
 }
 
 async function getPage(){
-    if (!heldResponse)
-        heldResponse += jsonArrayToTable(await getData(homeURL));
-    content.innerHTML = getContent + heldResponse;
+    try{
+        currentTable = jsonArrayToTable(await getData(homeURL));
+    } catch(err){}
+    content.innerHTML = getContent + heldResponse + currentTable;
     adjustButtons(3);
 
     //select form from dom
@@ -102,8 +119,10 @@ async function getPage(){
 }
 
 async function deletePage(){
-    heldResponse += jsonArrayToTable(await getData(homeURL));
-    content.innerHTML = deleteContent + heldResponse;
+    try{
+        currentTable = jsonArrayToTable(await getData(homeURL));
+    } catch(err){}
+    content.innerHTML = deleteContent + heldResponse + currentTable;
     adjustButtons(1);
     //select form from dom
     envelopeForm = document.querySelector('#envelope-form');
@@ -156,10 +175,6 @@ const postData = async (url, data) => {
 
 }
 
-async function resetHome(){
-    content.innerHTML = jsonArrayToTable(await getData(homeURL));
-
-}
 window.onload = resetHome();
 const postContent = `
 <form id="envelope-form" action=${homeURL} method="POST">
@@ -205,17 +220,9 @@ const deleteContent = `
 
 
 
-homeButton.onclick = async () => {
-    content.innerHTML = jsonArrayToTable(await getData(envelopeForm.action));
-    adjustButtons(0);
-}
-
+homeButton.onclick = homePage;
 postButton.onclick = postPage;
-
-
-
 getButton.onclick = getPage;
-
 deleteButton.onclick = deletePage;
 
 
