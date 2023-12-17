@@ -3,6 +3,33 @@
     margin-left: 100px;
     margin-right: 100px;
 }
+#envelope-form {
+    float: left;
+}
+
+#displayBlock {
+    float: right;
+}
+#displayBlock {
+    /* Basic properties */
+    display: inline-block;
+    padding: 1px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: white; 
+    background-color: #3C6478;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    margin-left: 50px;
+    margin-top: 30px;
+
+    /* Add a transition effect for the hover state */
+    transition-duration: 0.4s;
+}
 button {
     /* Basic properties */
     display: inline-block;
@@ -40,7 +67,9 @@ body {
     margin-right: 100px;
     background-color: #ACBBCA;
 }
-
+tr {
+    margin: 8px;
+}
 .table-container {
     width: 80%;
     max-height: 300px;

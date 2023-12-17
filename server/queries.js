@@ -24,8 +24,9 @@ const getEnvelopeById = (req, res) => {
 const getEnvelopes = (req, res) => {
     pool.query('SELECT * FROM envelopes ORDER BY id ASC', (error, results) => {
       if (error) {
-        throw error
+        throw error;
       }
+      
       res.status(200).json(results.rows);
     })
 }
@@ -38,6 +39,17 @@ const postNewEnvelope = (req, res) => {
       throw error
     }
     res.status(201).send("successfully posted new envelope");
+  })
+}
+const updateEnvelope = (req, res) => {
+  const name = req.body.name;
+  const balance = req.body.balance;
+  const id = req.body.id;
+  pool.query(`UPDATE envelopes SET name = $1, balance = $2 WHERE id = $3`, [name, balance, id], (error, results) => {
+    if (error){
+      throw error
+    }
+    res.status(201).send("successfully updated envelope");
   })
 }
 
@@ -58,11 +70,12 @@ const verifyEnvelopeId = (req, res, next) => {
   //set id = the numerical representation of the :envelopeId parameter
   const id = parseInt(req.params.envelopeId);
   //query the envelopes table for the specified id
+  if (req.method === 'OPTIONS'){
+    next();
+  } else{
+  console.log(req.method);
   pool.query('SELECT * FROM envelopes WHERE id = $1', [id], (error, results) => {
-    if (error){
-      throw error
-    }
-    if(results.rowCount === 0){
+    if(results.rowCount == 0){
       //if id does not exist in specified table, 404 not found
       res.status(404).send(`element with ID of ${id} does not exist in envelopes table`)
     } else{
@@ -72,11 +85,13 @@ const verifyEnvelopeId = (req, res, next) => {
     }
   })
 }
+}
 
 module.exports = {
     getEnvelopeById,
     getEnvelopes,
     postNewEnvelope,
+    updateEnvelope,
     deleteEnvelopeById,
     verifyEnvelopeId
 }
