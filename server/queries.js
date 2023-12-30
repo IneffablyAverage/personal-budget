@@ -10,7 +10,6 @@ const pool = new Pool({
     port: process.env.PORT
 })
 
-
 const getEnvelopeById = (req, res) => {
     const id = req.id;
     pool.query('SELECT * FROM envelopes WHERE id = $1', [id], (error, results) => {
@@ -41,6 +40,7 @@ const postNewEnvelope = (req, res) => {
     res.status(201).send("successfully posted new envelope");
   })
 }
+
 const updateEnvelope = (req, res) => {
   const name = req.body.name;
   const balance = req.body.balance;

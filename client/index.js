@@ -39,10 +39,11 @@ function jsonArrayToTable(data){
 function jsonArrayDisplay(data){
     data = data[0];
     let block = `
-        <div id="displayBlock">
-
-            <h2>${data['name']}</h2>
+        <div id="display-block">
+            <h2 style='display:inline'>${data['name']}</h2>
+            <button>Add Expense</button>
             <p>Balance = $${data['balance']}</p>
+            <button>Add Income</button>
 
         </div>
     `
@@ -53,7 +54,7 @@ async function renderRows(){
     tableRows = document.querySelector('tbody').children;
     for(let index = 1; index < tableRows.length; index++){
         tableRows[index].onclick = (event) => {
-            updatePage(event, index);
+            getPage(event, index);
         };
     }
 }
@@ -152,38 +153,23 @@ async function updatePage(_, row=1){
         updatePage();
     }
 }
-async function getPage(){
+async function getPage(_, row=1){
     try{
         currentTable = jsonArrayToTable(await getData(homeURL));
     } catch(err){}
+    
+    adjustButtons(3);
+    let id = tableRows[row].children[0].innerHTML;
+    let response = jsonArrayDisplay(await getData(homeURL + `${id}`));
+    if (heldResponse !== response){
+        heldResponse = response;
+    }
     content.innerHTML = getContent + heldResponse + currentTable;
     renderRows();
-    adjustButtons(3);
-
-    //select form from dom
-    envelopeForm = document.querySelector('#envelope-form');
-
-    //set the function to be called when form is submitted
-    envelopeForm.onsubmit = async (event) => {
-        console.log('preventing default');
-        event.preventDefault();
-        
-        let id = envelopeForm.elements['id'].value;
-        
-        envelopeForm.action += `${id}`;
-        console.log(envelopeForm.action);
-
-        //typical form submission would redirect the user to a new page (the action URL)
-        //we don't want that in this case. I want a single dynamic webpage.
-        //we accomplish this by using a function (getData) that uses the fetch API
-        heldResponse = jsonArrayDisplay(await getData(envelopeForm.action));
-        envelopeForm.action = homeURL;
         //call getPage again to reset all statuses except for any recieved data
-        getPage();
-    }
-    
+
 }
-async function deletePage(){
+async function deletePage(_, row=1){
     try{
         currentTable = jsonArrayToTable(await getData(homeURL));
     } catch(err){}
@@ -192,7 +178,7 @@ async function deletePage(){
     adjustButtons(1);
     //select form from dom
     envelopeForm = document.querySelector('#envelope-form');
-
+    envelopeForm.elements['id'].value = tableRows[row].children[0].innerHTML;
     //set the function to be called when form is submitted
     envelopeForm.onsubmit = async (event) => {
         console.log('preventing default');
@@ -294,16 +280,6 @@ const updateContent = `
 </form>
 `
 const getContent = `
-<form id="envelope-form" action=${homeURL} method="GET">
-
-    <h2>SELECT Envelope</h2>
-
-    <label for="id">ID</label>
-    <input type="number" name="id"> <br>
-
-    <input type="submit" name="submit-get-envelope"> <br>
-
-</form>
 `
 
 const deleteContent = `
