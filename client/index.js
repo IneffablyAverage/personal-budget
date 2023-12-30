@@ -1,3 +1,5 @@
+let burgerButton = document.querySelector(".burger-button");
+
 let buttonsBar = document.querySelector('#buttons');
 let buttons = buttonsBar.children;
 let homeButton = buttonsBar.querySelector('#home');
@@ -27,7 +29,11 @@ function jsonArrayToTable(data){
     for(let element of data){
         table += `<tr id=row${rowId}>`;
         for(let key of keys){
-            table += `<td>${element[key]}</td>`
+            if (key == "balance"){
+                table += `<td>$${element[key]}</td>`;
+            } else{
+                table += `<td>${element[key]}</td>`;
+            }
         }
         rowId++;
         table += `</tr>`;
@@ -60,11 +66,12 @@ async function renderRows(){
 }
 
 function adjustButtons(buttonNum){
+    console.log("adjusting buttons");
     for(let i = 0; i < buttons.length; i++){
         if (i === buttonNum){
             buttons[i].setAttribute('style', 'display: none');
         } else{
-            buttons[i].setAttribute('style', 'display: inline');
+            buttons[i].setAttribute('style', 'display: inline-block');
         }
     }
 }
@@ -73,6 +80,8 @@ function adjustButtons(buttonNum){
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 async function homePage(){
+    buttonsBar.style.transform = "translateY(-200%)";
+    setTimeout(() => {buttonsBar.style.display = "none";}, 500);
     try{
         currentTable = jsonArrayToTable(await getData(homeURL));
     } catch {}
@@ -303,6 +312,18 @@ postButton.onclick = postPage;
 getButton.onclick = getPage;
 deleteButton.onclick = deletePage;
 updateButton.onclick = updatePage;
+
+burgerButton.onclick = () => {
+    console.log(buttonsBar.style.transform);
+    if(buttonsBar.style.transform == "" || buttonsBar.style.transform == "translateY(-200%)"){
+        buttonsBar.style.display = "block";
+        setTimeout(() => {buttonsBar.style.transform = "translateY(0%)";}, 5);
+    } else{
+        buttonsBar.style.transform = "translateY(-200%)";
+        setTimeout(() => {buttonsBar.style.display = "none";}, 500);
+    }
+
+}
 
 window.onload = async () =>{
     content.innerHTML = jsonArrayToTable(await getData(homeURL));
