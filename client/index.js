@@ -1,5 +1,6 @@
 let burgerButton = document.querySelector(".burger-button");
-
+let incomeButton = "";
+let expenseButton = "";
 let buttonsBar = document.querySelector('#buttons');
 let buttons = buttonsBar.children;
 let homeButton = buttonsBar.querySelector('#home');
@@ -47,9 +48,9 @@ function jsonArrayDisplay(data){
     let block = `
         <div id="display-block">
             <h2 style='display:inline'>${data['name']}</h2>
-            <button>Add Expense</button>
+            <button id="expense">Add Expense</button>
             <p>Balance = $${data['balance']}</p>
-            <button>Add Income</button>
+            <button id="income">Add Income</button>
 
         </div>
     `
@@ -99,6 +100,9 @@ async function postPage(){
     content.innerHTML = postContent + heldResponse + currentTable;
     renderRows();
     adjustButtons(2);
+    incomeButton = document.querySelector("#income");
+    expenseButton = document.querySelector("#expense");
+
 
     //select form from dom
     envelopeForm = document.querySelector('#envelope-form');
@@ -131,8 +135,10 @@ async function updatePage(_, row=1){
     } catch(err){}
     content.innerHTML = updateContent + heldResponse + currentTable;
     renderRows();
-
     adjustButtons(4);
+
+    incomeButton = document.querySelector("#income");
+    expenseButton = document.querySelector("#expense");
     
     //select form from dom
     envelopeForm = document.querySelector('#envelope-form');
@@ -175,7 +181,8 @@ async function getPage(_, row=1){
     }
     content.innerHTML = getContent + heldResponse + currentTable;
     renderRows();
-        //call getPage again to reset all statuses except for any recieved data
+    incomeButton = document.querySelector("#income");
+    expenseButton = document.querySelector("#expense");
 
 }
 async function deletePage(_, row=1){
@@ -185,6 +192,10 @@ async function deletePage(_, row=1){
     content.innerHTML = deleteContent + heldResponse + currentTable;
     renderRows();
     adjustButtons(1);
+
+    incomeButton = document.querySelector("#income");
+    expenseButton = document.querySelector("#expense");
+
     //select form from dom
     envelopeForm = document.querySelector('#envelope-form');
     envelopeForm.elements['id'].value = tableRows[row].children[0].innerHTML;
@@ -312,6 +323,8 @@ postButton.onclick = postPage;
 getButton.onclick = getPage;
 deleteButton.onclick = deletePage;
 updateButton.onclick = updatePage;
+expenseButton.onclick = ;
+incomeButton.onclick = ;
 
 burgerButton.onclick = () => {
     console.log(buttonsBar.style.transform);

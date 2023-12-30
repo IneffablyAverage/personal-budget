@@ -32,7 +32,6 @@ html {
 #buttons {
     position:absolute;
     display: none;
-    float:right;
     width: 15%;
     right: 1px;
     text-align: right;
