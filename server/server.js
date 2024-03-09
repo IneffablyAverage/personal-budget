@@ -37,6 +37,6 @@ app.post('/envelopes/', db.postNewEnvelope);
 
 
 //delete envelope by envelopeId is working
-app.delete('/envelopes/:envelopeId', db.deleteEnvelopeById);
+app.delete('/:envelopeId', db.deleteEnvelopeById);
 
 app.listen(3000, () => console.log("listening on port 3000"));
