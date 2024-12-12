@@ -1,13 +1,13 @@
 const Pool = require("pg").Pool;
 require('dotenv').config();
 
-//pool is used to access the postgresql daatabase being used for this app
+//pool is used to access the postgresql database being used for this app
 const pool = new Pool({
     user: process.env.USER,
     host: process.env.HOST,
     database: process.env.DATABASE,
     password: process.env.PASSWORD,
-    port: process.env.PORT
+    port: process.env.PORT    
 })
 
 
